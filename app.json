@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Router Island",
+    "slug": "router-island",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "routerisland",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.aitorru.routerisland",
+      "infoPlist": {
+        "NSSupportsLiveActivities": true
+      },
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.com.aitorru.routerisland"]
+      }
+    },
+    "plugins": ["expo-dev-client", "expo-secure-store", "@bacons/apple-targets"]
+  }
+}

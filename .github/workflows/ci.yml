@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Typecheck, lint & prebuild
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # Validates that the config plugins (@bacons/apple-targets, expo-secure-store)
+      # and the Live Activity target wire up into a real iOS project. Runs on Linux;
+      # it generates the Xcode project without compiling Swift.
+      - name: Prebuild (iOS) validation
+        run: npx expo prebuild -p ios --no-install --clean
+
+  eas-build:
+    name: EAS Build (iOS)
+    runs-on: ubuntu-latest
+    needs: validate
+    # Only on main or manual runs, and only when an Expo token is configured.
+    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard on EXPO_TOKEN
+        id: guard
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "EXPO_TOKEN secret not set — skipping EAS build."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.guard.outputs.run == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: expo/expo-github-action@v8
+        if: steps.guard.outputs.run == 'true'
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        if: steps.guard.outputs.run == 'true'
+        run: npm ci
+
+      - name: Build iOS (development profile)
+        if: steps.guard.outputs.run == 'true'
+        run: eas build --platform ios --profile development --non-interactive --no-wait
