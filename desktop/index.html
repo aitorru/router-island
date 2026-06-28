@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Router Island</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+  <body>
+    <div class="widget" id="widget">
+      <div class="titlebar" data-tauri-drag-region>
+        <span class="brand"><span class="dot"></span>OpenRouter</span>
+        <div class="actions">
+          <button class="icon-btn" id="refresh" title="Refresh">⟳</button>
+          <button class="icon-btn" id="settings" title="Change API key">⚙</button>
+          <button class="icon-btn" id="close" title="Close">✕</button>
+        </div>
+      </div>
+
+      <!-- Balance view -->
+      <section class="balance" id="balance-view" hidden>
+        <div class="ring" id="ring">
+          <svg viewBox="0 0 120 120">
+            <circle class="ring-track" cx="60" cy="60" r="52" />
+            <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52" />
+          </svg>
+          <div class="ring-center">
+            <div class="amount" id="amount">—</div>
+            <div class="amount-label">left</div>
+          </div>
+        </div>
+        <div class="meta">
+          <div><span id="used">—</span><small>used</small></div>
+          <div><span id="total">—</span><small>total</small></div>
+        </div>
+        <div class="footer" id="footer">&nbsp;</div>
+      </section>
+
+      <!-- API key form -->
+      <section class="keyform" id="key-view" hidden>
+        <p class="hint">Paste your OpenRouter API key</p>
+        <input id="key-input" type="password" placeholder="sk-or-v1-…" autocomplete="off" spellcheck="false" />
+        <button class="primary" id="key-save">Save</button>
+        <p class="error" id="key-error"></p>
+      </section>
+
+      <section class="loading" id="loading-view">
+        <div class="spinner"></div>
+      </section>
+    </div>
+  </body>
+</html>
