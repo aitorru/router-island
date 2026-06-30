@@ -1,11 +1,14 @@
+/* ── the-watch design tokens ── */
 :root {
-  --bg1: #2b1d5a;
-  --bg2: #6d4aff;
-  --accent: #b9a7ff;
-  --green: #43e7a4;
-  --text: #f5f3ff;
-  --muted: #b9b3d6;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --bg: #050505;
+  --panel: #0b0b0b;
+  --text: #f5f5f5;
+  --muted: #8a8a8a;
+  --line: #f5f5f5;
+  --positive: #5ee06c;
+  --warning: #ffd24a;
+  --critical: #ff5d5d;
+  font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
 }
 
 * {
@@ -23,21 +26,21 @@ body {
   height: 100vh;
 }
 
+/* ── Widget shell ── */
 .widget {
   width: 100vw;
   height: 100vh;
-  border-radius: 22px;
+  border-radius: 4px;
   padding: 12px 16px 14px;
   color: var(--text);
-  background: radial-gradient(140% 120% at 0% 0%, var(--bg2) 0%, var(--bg1) 55%, #160f33 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 18px 40px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--panel);
+  border: 1px solid rgba(245, 245, 245, 0.08);
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
-/* Title bar */
+/* ── Title bar ── */
 .titlebar {
   display: flex;
   align-items: center;
@@ -45,20 +48,21 @@ body {
   cursor: grab;
 }
 .brand {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   color: var(--muted);
   display: flex;
   align-items: center;
   gap: 6px;
 }
 .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
+  width: 6px;
+  height: 6px;
+  border-radius: 0;
+  background: var(--positive);
+  box-shadow: 0 0 6px rgba(94, 224, 108, 0.6);
 }
 .actions {
   display: flex;
@@ -68,7 +72,7 @@ body {
   width: 22px;
   height: 22px;
   border: none;
-  border-radius: 7px;
+  border-radius: 2px;
   background: transparent;
   color: var(--muted);
   font-size: 13px;
@@ -76,11 +80,11 @@ body {
   transition: background 0.15s, color 0.15s;
 }
 .icon-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(245, 245, 245, 0.08);
   color: var(--text);
 }
 
-/* Balance */
+/* ── Balance view ── */
 .balance {
   flex: 1;
   display: flex;
@@ -101,18 +105,18 @@ body {
 }
 .ring-track {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.1);
+  stroke: rgba(245, 245, 245, 0.06);
   stroke-width: 9;
 }
 .ring-fill {
   fill: none;
-  stroke: var(--green);
+  stroke: var(--positive);
   stroke-width: 9;
-  stroke-linecap: round;
+  stroke-linecap: butt;
   stroke-dasharray: 326.7;
   stroke-dashoffset: 326.7;
   transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  filter: drop-shadow(0 0 5px rgba(67, 231, 164, 0.5));
+  filter: drop-shadow(0 0 4px rgba(94, 224, 108, 0.4));
 }
 .ring-center {
   position: absolute;
@@ -126,14 +130,14 @@ body {
   font-size: 26px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  color: var(--green);
+  color: var(--positive);
   line-height: 1;
 }
 .amount-label {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   margin-top: 2px;
 }
 
@@ -153,24 +157,25 @@ body {
   font-variant-numeric: tabular-nums;
 }
 .meta small {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 1.2px;
 }
 
 .footer {
   position: absolute;
   bottom: 8px;
   left: 16px;
-  font-size: 10px;
+  font-size: 9px;
   color: var(--muted);
+  letter-spacing: 0.5px;
 }
 .footer.error {
-  color: #ff9b9b;
+  color: var(--critical);
 }
 
-/* Key form */
+/* ── API key form ── */
 .keyform {
   flex: 1;
   display: flex;
@@ -179,43 +184,50 @@ body {
   gap: 8px;
 }
 .hint {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
+  letter-spacing: 0.3px;
 }
 #key-input {
   width: 100%;
   padding: 9px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+  border: 1px solid rgba(245, 245, 245, 0.12);
+  background: rgba(0, 0, 0, 0.6);
   color: var(--text);
-  font-size: 13px;
+  font-family: inherit;
+  font-size: 12px;
   outline: none;
+  transition: border-color 0.15s;
 }
 #key-input:focus {
-  border-color: var(--accent);
+  border-color: var(--positive);
 }
 .primary {
   padding: 9px;
-  border: none;
-  border-radius: 10px;
-  background: var(--bg2);
-  color: #fff;
+  border: 1px solid rgba(245, 245, 245, 0.12);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: filter 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
 .primary:hover {
-  filter: brightness(1.1);
+  background: rgba(245, 245, 245, 0.06);
+  border-color: var(--positive);
 }
 .error {
   font-size: 11px;
-  color: #ff9b9b;
+  color: var(--critical);
   min-height: 14px;
 }
 
-/* Loading */
+/* ── Loading ── */
 .loading {
   flex: 1;
   display: flex;
@@ -223,15 +235,23 @@ body {
   justify-content: center;
 }
 .spinner {
-  width: 26px;
-  height: 26px;
-  border: 3px solid rgba(255, 255, 255, 0.2);
-  border-top-color: var(--green);
-  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(245, 245, 245, 0.08);
+  border-top-color: var(--positive);
+  border-radius: 0;
   animation: spin 0.8s linear infinite;
 }
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ── Terminal divider ── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(245, 245, 245, 0.06);
+  margin: 8px 0;
 }
